@@ -1,0 +1,22 @@
+{
+  "name": "penguin-skype-bot",
+  "version": "1.0.0",
+  "description": "report time",
+  "main": "index.js",
+  "repository": {
+    "url": "git@github.com:andreszorro/penguin-skype-bot.git",
+    "type": "git"
+  },
+  "author": "Andres Zorro <andres.zorro@zemoga.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"  
+  },
+  "scripts": {
+    "start": "node index.js"  
+  },
+  "dependencies": {
+    "botbuilder": "^3.4.4",
+    "restify": "^4.3.0"
+  }
+}
