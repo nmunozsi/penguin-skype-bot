@@ -1,5 +1,6 @@
 const restify = require("restify");
 const builder = require("botbuilder");
+const assert = require("assert");
 
 // Setup Restify Server
 const server = restify.createServer();
@@ -7,8 +8,8 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
    console.log("%s listening to %s", server.name, server.url); 
 });
 
-console.log(process.env.APP_ID);
-console.log(process.env.APP_PWD);
+assert(process.env.APP_ID, "No App ID set!");
+assert(process.env.APP_PWD, "No App Pwd set!");
 
 const connector = new builder.ChatConnector({
     appId: process.env.APP_ID,
@@ -18,13 +19,9 @@ const connector = new builder.ChatConnector({
 const bot = new builder.UniversalBot(connector);
 
 // Restify
-server.get("/", (req, res) => {
-    res.send({hello: "world"});
-    return next();
-});
-server.post('/api/messages', connector.listen());
+server.post("/api/messages", connector.listen());
 
 // Bot
-bot.dialog('/', function (session) {
+bot.dialog("/", (session) => {
     session.send("Hello World");
 });
