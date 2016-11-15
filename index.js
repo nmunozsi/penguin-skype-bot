@@ -16,11 +16,12 @@ const connector = new builder.ChatConnector({
     appPassword: process.env.APP_PWD
 });
 
+// const connector = new builder.ConsoleConnector().listen();
+
 const bot = new builder.UniversalBot(connector);
 
 // Restify
 server.post("/api/messages", connector.listen());
-server.post("/", res => res.send(200));
 
 // Bot
 bot.dialog("/", (session) => {
