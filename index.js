@@ -49,7 +49,7 @@ setTimeout(() => {
          useAuth: true 
       })
       .text("This is a timeout test! %s", new Date().toString());
-      
+   console.log("Sending message");
    bot.send(msg);
 }, 30000);
 
