@@ -25,5 +25,5 @@ server.post("/api/messages", connector.listen());
 
 // Bot
 bot.dialog("/", (session) => {
-    session.send("Hello World");
+    session.send("Address id is %s", session.message.address);
 });
