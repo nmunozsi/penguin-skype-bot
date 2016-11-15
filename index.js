@@ -23,11 +23,11 @@ const bot = new builder.UniversalBot(connector);
 // Restify
 server.post("/api/messages", connector.listen());
 // 
-// // Bot
-// bot.dialog("/", (session) => {
-//    console.log(session.message);
-//    session.send("Address id is %s", session.message.address);
-// });
+// Bot
+bot.dialog("/", (session) => {
+   console.log(session.message);
+   // session.send("Address id is %s", session.message.address);
+});
 
 setTimeout(() => {
    const msg = new builder.Message()
