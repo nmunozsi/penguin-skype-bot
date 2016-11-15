@@ -29,27 +29,27 @@ bot.dialog("/", (session) => {
    // session.send("Address id is %s", session.message.address);
 });
 
-setTimeout(() => {
-   const msg = new builder.Message()
-      .address({ 
-         id: '4dd2ZfkzZ3ZILH8K',
-         channelId: 'skype',
-         user: { 
-            id: '29:15uqu8NboV6gFk1tSWbtTNESZ6uf6Oe5wzBLdsoIAvI0',
-            name: 'Andres Zorro' 
-         },
-         conversation: { 
-           id: '29:15uqu8NboV6gFk1tSWbtTNESZ6uf6Oe5wzBLdsoIAvI0' 
-         },
-         bot: { 
-            id: '28:0052536f-9a58-41d0-bf09-2bb0cba028b7',
-            name: 'Penguin Report' 
-         },
-         serviceUrl: 'https://skype.botframework.com',
-         useAuth: true 
-      })
-      .text("This is a timeout test! %s", new Date().toString());
-   console.log("Sending message");
-   bot.send(msg);
-}, 30000);
+// setTimeout(() => {
+//    const msg = new builder.Message()
+//       .address({ 
+//          id: '4dd2ZfkzZ3ZILH8K',
+//          channelId: 'skype',
+//          user: { 
+//             id: '29:15uqu8NboV6gFk1tSWbtTNESZ6uf6Oe5wzBLdsoIAvI0',
+//             name: 'Andres Zorro' 
+//          },
+//          conversation: { 
+//            id: '29:15uqu8NboV6gFk1tSWbtTNESZ6uf6Oe5wzBLdsoIAvI0' 
+//          },
+//          bot: { 
+//             id: '28:0052536f-9a58-41d0-bf09-2bb0cba028b7',
+//             name: 'Penguin Report' 
+//          },
+//          serviceUrl: 'https://skype.botframework.com',
+//          useAuth: true 
+//       })
+//       .text("This is a timeout test! %s", new Date().toString());
+//    console.log("Sending message");
+//    bot.send(msg);
+// }, 30000);
 
