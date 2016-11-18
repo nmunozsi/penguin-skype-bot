@@ -2,6 +2,7 @@ const restify = require("restify");
 const builder = require("botbuilder");
 const assert = require("assert");
 const DataStore = require("nedb-promise");
+const _ = require("lodash");
 
 const DB = {
     dudes: new DataStore({
@@ -55,17 +56,43 @@ function storeInDB(type, data) {
     return DB[`${type}s`].find({ [key]: data[key] })
         .then(result => {
             if (!result.length) {
-                console.log(`Creating new ${type} record: ${data[key]}`);
-                return DB[`${type}s`].insert(data);
+                console.log(`Creating new ${type}: ${data[key]}`);
+                return Promise.all([
+                    DB[`${type}s`].insert(data),
+                    "new"
+                ]);
             }
+
+            result = result[0];
 
             if (result.id !== data.id) {
-                return DB[`${type}s`].update({ _id: result._id }, { $set: data });
+                console.log(`Updating ${type}: ${data[key]}`);
+                return Promise.all([
+                    DB[`${type}s`].update({ _id: result._id }, { $set: data }),
+                    "update"
+                ]);
             }
 
-            return Promise.resolve(result);
+            return Promise.all([result, "existing"]);
         })
-        .then(result => console.log(`${type} stored`))
+        .then(results => {
+            const [user, resType] = results;
+            console.log(`${resType}: ${type}`);
+            return Promise.resolve(results);
+        })
+        .catch(err => console.log(err, "Errored!"));
+}
+
+function createAddressForUser (name, bot) {
+    return DB.dudes.find({ name })
+        .then(user => Promise.resolve({
+            channelId: ENV === "local" ? "console" : "skype",
+            user: _.omit(user, "_id"),
+            conversation: { id: user.id },
+            bot,
+            serviceUrl: 'https://skype.botframework.com',
+            useAuth: true
+        }))
         .catch(err => console.log(err, "Errored!"));
 }
 
@@ -73,6 +100,21 @@ function storeInDB(type, data) {
 const bot = new builder.UniversalBot(connector);
 
 bot.dialog("/", (session) => {
-    storeInDB("dude", session.message.address.user);
     storeInDB("channel", session.message.address.conversation);
+    storeInDB("dude", session.message.address.user)
+        .then(results => {
+            const [user, resType] = results;
+            if (resType !== "new" && resType !== "update") {
+                return;
+            }
+
+            createAddressForUser(ENV === "local" ? "User1" : "Andres Zorro")
+                .then(address => {
+                    const msg = new builder.Message()
+                        .address(address)
+                        .text(`${resType}: ${user.name || user.id}`);
+
+                    bot.send(msg);
+                })
+        });
 });
