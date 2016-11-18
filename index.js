@@ -108,7 +108,9 @@ bot.dialog("/", (session) => {
                 return;
             }
 
-            createAddressForUser(ENV === "local" ? "User1" : "Andres Zorro")
+            createAddressForUser(
+                ENV === "local" ? "User1" : "Andres Zorro",
+                session.message.address.bot)
                 .then(address => {
                     const msg = new builder.Message()
                         .address(address)
