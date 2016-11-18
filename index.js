@@ -63,37 +63,38 @@ function storeInDB(type, data) {
                 ]);
             }
 
-            result = result[0];
-
-            if (result.id !== data.id) {
+            if (result[0].id !== data.id) {
                 console.log(`Updating ${type}: ${data[key]}`);
                 return Promise.all([
-                    DB[`${type}s`].update({ _id: result._id }, { $set: data }),
+                    DB[`${type}s`].update(
+                        { _id: result[0]._id },
+                        data,
+                        { returnUpdatedDocs: true }),
                     "update"
                 ]);
             }
 
-            return Promise.all([result, "existing"]);
+            return Promise.all([result[0], "existing"]);
         })
         .then(results => {
             const [user, resType] = results;
             console.log(`${resType}: ${type}`);
-            return Promise.resolve(results);
+            return Promise.resolve([user[1] || user[0] || user, resType]);
         })
-        .catch(err => console.log(err, "Errored!"));
+        .catch(err => console.log(err, "Errored when searchin DB!"));
 }
 
 function createAddressForUser (name, bot) {
     return DB.dudes.find({ name })
         .then(user => Promise.resolve({
             channelId: ENV === "local" ? "console" : "skype",
-            user: _.omit(user, "_id"),
-            conversation: { id: user.id },
+            user: _.omit(user[0], "_id"),
+            conversation: { id: user[0].id },
             bot,
             serviceUrl: 'https://skype.botframework.com',
             useAuth: true
         }))
-        .catch(err => console.log(err, "Errored!"));
+        .catch(err => console.log(err, "Errored when creating address!"));
 }
 
 // Bot
