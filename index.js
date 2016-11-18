@@ -31,7 +31,19 @@ if (ENV !== "local") {
 
     assert(process.env.APP_ID, "No App ID set!");
     assert(process.env.APP_PWD, "No App Pwd set!");
+
     server.post("/api/messages", connector.listen());
+    server.post("/api/dudes", (req, res) => {
+        DB.dudes.find({})
+            .then(result => res.send(result))
+            .catch(err => res.status(500).send(err));
+    });
+
+    server.post("/api/channels", (req, res) => {
+        DB.channels.find({})
+            .then(result => res.send(result))
+            .catch(err => res.status(500).send(err));
+    });
 } else {
     console.log("Starting console client");
     connector = new builder.ConsoleConnector().listen();
@@ -61,7 +73,6 @@ function storeInDB(type, data) {
 const bot = new builder.UniversalBot(connector);
 
 bot.dialog("/", (session) => {
-
     storeInDB("dude", session.message.address.user);
     storeInDB("channel", session.message.address.conversation);
 });
