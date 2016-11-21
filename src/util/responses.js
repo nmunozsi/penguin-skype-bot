@@ -5,7 +5,7 @@ const TESTERS = {
     links (msg) {
         const text = load(msg.text).text();
         return text.split(" ").reduce((arr, w) => {
-            if (/^https?:\/\/.*/.test(w)) {
+            if (/^https?:\/\/.*/.test(w) && !/penguin-report/.test(w)) {
                 arr.push({
                     sharedBy: msg.user.id,
                     sharedAt: msg.timestamp,
