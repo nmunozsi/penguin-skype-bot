@@ -5,7 +5,6 @@ const TESTERS = {
     links (msg) {
         const text = load(msg.text).text();
         return text.split(" ").reduce((arr, w) => {
-            console.log(w);
             if (/^https?:\/\/.*/.test(w)) {
                 arr.push({
                     sharedBy: msg.user.id,
