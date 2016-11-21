@@ -5,6 +5,7 @@ module.exports = function (server) {
     server.get("/api/links", (req, res) => {
         const sharedBy = req.query.sharedBy;
         const sharedIn = req.query.sharedIn;
+        const type = req.query.type;
 
         let links;
 
@@ -21,7 +22,12 @@ module.exports = function (server) {
             });
 
             if (sharedBy) {
-                links = links.filter(link => new RegExp(sharedBy, "i").test(link.sharedBy.name))
+                links = links.filter(link =>
+                    new RegExp(sharedBy, "i").test(link.sharedBy.name))
+            }
+
+            if (type) {
+                links = links.filter(link => link.type === "type");
             }
 
             if (sharedIn) {

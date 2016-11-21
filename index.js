@@ -27,6 +27,8 @@ bot.dialog("/", (session) => {
     const parsed = parseMessage(session.message);
 
     if (parsed.links) {
-        parsed.links.forEach(link => storeInDB("link", link, "link"));
+        parsed.links.forEach(link => storeInDB("link", link, "link", (result, data) => {
+            return result.sharedOn !== data.sharedOn || result.link !== data.link;
+        }));
     }
 });
