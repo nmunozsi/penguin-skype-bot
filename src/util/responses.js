@@ -1,8 +1,11 @@
 const { isEmpty } = require("lodash");
+const { load } = require("cheerio");
 
 const TESTERS = {
     links (msg) {
-        return msg.text.split(" ").reduce((arr, w) => {
+        const text = load(msg.text).text();
+        return text.split(" ").reduce((arr, w) => {
+            console.log(w);
             if (/^https?:\/\/.*/.test(w)) {
                 arr.push({
                     sharedBy: msg.user.id,
