@@ -5,6 +5,8 @@ const TESTERS = {
     links (msg) {
         const text = load(msg.text).text();
         return text.split(" ").reduce((arr, w) => {
+            w = w.replace(/\?.*/, ""); // Remove query string
+
             if (/^https?:\/\/.*/.test(w) && !/penguin-report/.test(w)) {
                 arr.push({
                     sharedBy: msg.user.id,
