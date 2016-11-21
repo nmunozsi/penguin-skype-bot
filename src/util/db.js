@@ -1,12 +1,13 @@
-const _ = require("lodash");
-const DB = require("./db");
+const { omit } = require("lodash");
+const DB = require("./../db");
 
-function storeInDB(type, data) {
-    const key = type === "dude" ? "name" : "id";
+function storeInDB(type, data, key, validator) {
+    key = key || "id";
+    validator = validator || "id";
 
-    return DB[`${type}s`].find({ [key]: data[key] })
+    return DB[`${type}s`].findOne({ [key]: data[key] })
         .then(result => {
-            if (!result.length) {
+            if (!result) {
                 console.log(`Creating new ${type}: ${data[key]}`);
                 return Promise.all([
                     DB[`${type}s`].insert(data),
@@ -14,18 +15,22 @@ function storeInDB(type, data) {
                 ]);
             }
 
-            if (result[0].id !== data.id) {
+            validator = typeof validator === "function" ? validator : (r, d) => {
+                return r[validator] !== d[validator];
+            };
+
+            if (validator(result, data)) {
                 console.log(`Updating ${type}: ${data[key]}`);
                 return Promise.all([
                     DB[`${type}s`].update(
-                        { _id: result[0]._id },
+                        { _id: result._id },
                         data,
                         { returnUpdatedDocs: true }),
                     "update"
                 ]);
             }
 
-            return Promise.all([result[0], "existing"]);
+            return Promise.all([result, "existing"]);
         })
         .then(results => {
             const [user, resType] = results;
@@ -39,7 +44,7 @@ function createAddressForUser (name, bot) {
     return DB.dudes.find({ name })
         .then(user => Promise.resolve({
             channelId: ENV === "local" ? "console" : "skype",
-            user: _.omit(user[0], "_id"),
+            user: omit(user[0], "_id"),
             conversation: { id: user[0].id },
             bot,
             serviceUrl: 'https://skype.botframework.com',

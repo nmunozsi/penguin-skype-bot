@@ -1,6 +1,7 @@
 const ENV = process.env.ENV || "local";
 const restify = require("restify");
 const builder = require("botbuilder");
+const assert = require("assert");
 
 let _connector, server;
 
@@ -11,6 +12,8 @@ if (ENV !== "local") {
     });
     // Restify
     server = restify.createServer();
+
+    server.use(restify.queryParser());
 
     assert(process.env.APP_ID, "No App ID set!");
     assert(process.env.APP_PWD, "No App Pwd set!");

@@ -18,6 +18,7 @@
   "dependencies": {
     "botbuilder": "^3.4.4",
     "lodash": "^4.17.2",
+    "moment": "^2.16.0",
     "nedb-promise": "^2.0.0",
     "restify": "^4.3.0"
   }
