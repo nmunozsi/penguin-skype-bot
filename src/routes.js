@@ -27,7 +27,7 @@ module.exports = function (server) {
             }
 
             if (type) {
-                links = links.filter(link => link.type === "type");
+                links = links.filter(link => link.type === type);
             }
 
             if (sharedIn) {
