@@ -13,14 +13,18 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node ."
   },
   "dependencies": {
     "botbuilder": "^3.4.4",
     "cheerio": "^0.22.0",
+    "debug": "^2.6.2",
     "lodash": "^4.17.2",
     "moment": "^2.16.0",
-    "nedb-promise": "^2.0.0",
     "restify": "^4.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.17.1",
+    "eslint-config-google": "~0.7.1"
   }
 }

@@ -1,0 +1,17 @@
+{
+    "extends": "google",
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
+
+    "rules": {
+        "object-curly-spacing": [2, "always"],
+        "max-len": [2, 120],
+        "comma-dangle": [2, "never"],
+        "space-before-function-paren": [2, {
+            "anonymous": "always",
+            "named": "never",
+            "asyncArrow": "ignore"
+        }]
+    }
+}
