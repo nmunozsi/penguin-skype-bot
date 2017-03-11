@@ -13,6 +13,7 @@ if (CONFIG.ENV !== 'local') {
         appId: CONFIG.APP_ID,
         appPassword: CONFIG.APP_PWD
     });
+
     // Restify
     server = restify.createServer();
 
