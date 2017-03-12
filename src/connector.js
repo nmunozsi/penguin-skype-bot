@@ -25,9 +25,6 @@ if (CONFIG.ENV !== 'local') {
 
     server.post('/api/messages', _connector.listen());
 
-    // Routes
-    require('./routes')(server);
-
     // Init server
     server.listen(CONFIG.port || CONFIG.PORT, function () {
         log('%s listening to %s', server.name, server.url);
