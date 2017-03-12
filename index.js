@@ -17,7 +17,7 @@ bot.dialog('/', (session) => {
     .then((subscriptions) => {
         trace('%O', subscriptions);
 
-        if (find(subscriptions, { id: address.id || address.channelId })) {
+        if (find(subscriptions, ['conversation.id', address.conversation.id])) {
             log('Channel already subscribed:', address.id);
             return Promise.resolve(true);
         }
