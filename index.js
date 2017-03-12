@@ -19,7 +19,7 @@ bot.dialog('/', (session) => {
 
         if (find(subscriptions, { id: address.id || address.channelId })) {
             log('Channel already subscribed:', address.id);
-            return Promise.resolve(false);
+            return Promise.resolve(true);
         }
 
         address.id = address.id || address.channelId;
@@ -31,13 +31,15 @@ bot.dialog('/', (session) => {
     .then((subscriptions) => {
         trace('%O', subscriptions);
 
-        if (!subscriptions) {
+        if (subscriptions) {
             return;
         }
 
         const msg = new builder.Message()
         .address(address)
         .text('¡Hola! Estoy suscrito a este canal');
+
+        addSubscription(address);
 
         return bot.send(msg);
     })
