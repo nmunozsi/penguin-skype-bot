@@ -4,6 +4,7 @@ const { log, trace, error } = require('./src/config/debug')(__filename);
 const builder = require('botbuilder');
 const db = require('./src/util/db');
 const addSubscription = require('./src/subscription');
+const CONFIG = require('./src/config/env');
 
 // BOT DIALOGS
 bot.dialog('/', (session) => {
@@ -42,6 +43,10 @@ bot.dialog('/', (session) => {
     })
     .catch((err) => error(err));
 });
+
+if (CONFIG.WIPE_DB) {
+    db.put('subscriptions', []);
+}
 
 // Sets intervals to send messages in the morning
 db.get('subscriptions')

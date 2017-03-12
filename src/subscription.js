@@ -122,7 +122,14 @@ function addSubscription(subscription) {
     .then((response) => {
         trace(response);
 
-        let holiday = Object.keys(get(response, 'holidays'))
+        const holidays = get(response, 'holidays');
+
+        if (!holidays) {
+            error('Holidays API error', response);
+            return;
+        }
+
+        let holiday = Object.keys(holidays)
         .map((h) => moment(h))
         .filter((h) => h.isSameOrAfter(now, 'month'))[0];
 
