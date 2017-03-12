@@ -46,9 +46,11 @@ function addTimer(now, nextDay, holiday, subscription) {
             const today = moment().tz('US/Central');
             const lastBusinessDay = business.subtractWeekDays(today.clone(), 1);
 
-            while (holiday.isSame(lastBusinessDay, 'day')) {
-                log('Last business day was holiday. Going back one more day');
-                business.subtractWeekDays(lastBusinessDay, 1);
+            if (holiday) {
+                while (holiday.isSame(lastBusinessDay, 'day')) {
+                    log('Last business day was holiday. Going back one more day');
+                    business.subtractWeekDays(lastBusinessDay, 1);
+                }
             }
 
             log('Last business day:', lastBusinessDay.format(CONFIG.DATE_FORMAT));
@@ -123,9 +125,10 @@ function addSubscription(subscription) {
         trace(response);
 
         const holidays = get(response, 'holidays');
+        let holiday;
 
         if (holidays) {
-            let holiday = Object.keys(holidays)
+            holiday = Object.keys(holidays)
             .map((h) => moment(h))
             .filter((h) => h.isSameOrAfter(now, 'month'))[0];
 
