@@ -11,20 +11,18 @@ bot.dialog('/', (session) => {
     log('Message received: "%s"', session.message.text);
 
     const address = session.message.address;
-    trace('%O', address);
+    trace('Address: %O', address);
 
     db.get('subscriptions')
     .then((subscriptions) => {
-        trace('%O', subscriptions);
+        trace('Subscriptions: %O', subscriptions);
 
         if (find(subscriptions, ['conversation.id', address.conversation.id])) {
-            log('Channel already subscribed:', address.id);
+            log('Channel already subscribed:', address.conversation.id);
             return Promise.resolve(true);
         }
 
-        address.id = address.id || address.channelId;
-
-        log('New channel subscribed!', address.id);
+        log('New channel subscribed!', address.conversation.id);
         subscriptions.push(address);
         return db.put('subscriptions', subscriptions);
     })
