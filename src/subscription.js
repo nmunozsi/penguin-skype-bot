@@ -124,21 +124,18 @@ function addSubscription(subscription) {
 
         const holidays = get(response, 'holidays');
 
-        if (!holidays) {
-            error('Holidays API error', response);
-            return;
-        }
+        if (holidays) {
+            let holiday = Object.keys(holidays)
+            .map((h) => moment(h))
+            .filter((h) => h.isSameOrAfter(now, 'month'))[0];
 
-        let holiday = Object.keys(holidays)
-        .map((h) => moment(h))
-        .filter((h) => h.isSameOrAfter(now, 'month'))[0];
+            log('Next Colombian Holiday:', holiday.format(CONFIG.DATE_FORMAT));
 
-        log('Next Colombian Holiday:', holiday.format(CONFIG.DATE_FORMAT));
+            while (holiday.isSame(nextDay, 'day')) {
+                log('Adding one more day to next day count');
 
-        while (holiday.isSame(nextDay, 'day')) {
-            log('Adding one more day to next day count');
-
-            business.addWeekDays(nextDay, 1);
+                business.addWeekDays(nextDay, 1);
+            }
         }
 
         addTimer(now, nextDay, holiday, subscription);
