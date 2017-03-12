@@ -1,17 +1,51 @@
 const debug = require('debug');
-const { partial } = require('lodash');
+const { partial, includes } = require('lodash');
 const CONFIG = require('./env');
 
-debug.enable(CONFIG.LOG_LEVEL);
+const LEVELS = [
+    'error',
+    'warn',
+    'info',
+    'log',
+    'debug',
+    'trace'
+];
+
+const OFF_VALUES = [
+    'null',
+    'undefined',
+    'false',
+    'off',
+    ''
+];
+
+const levelAsString = LEVELS
+.map((level) => `${level}:*`)
+.reduce((logLevel, next) => {
+    if (includes(OFF_VALUES, CONFIG.LOG_LEVEL)) {
+        return '';
+    }
+
+    if (includes(logLevel, CONFIG.LOG_LEVEL)) {
+        return logLevel;
+    }
+
+    return `${logLevel},${next}`;
+});
+
+const additionalDebug = CONFIG.DEBUG ? `,${CONFIG.DEBUG}` : '';
+
+debug.enable(levelAsString + additionalDebug);
 
 module.exports = function (filepath = '') {
     const path = filepath.replace(process.cwd(), '');
 
     return {
+        error: partial(debug(`error:${path}`), '🛑  '),
+        warn: partial(debug(`warn:${path}`), '⚠️  '),
+        info: partial(debug(`info:${path}`), '🔎  '),
         log: debug(`log:${path}`),
-        warn: partial(debug(`warn:${path}`), '⚠️'),
-        error: partial(debug(`error:${path}`), '🛑'),
-        info: partial(debug(`info:${path}`), '🔎'),
+        debug: debug(`debug:${path}`),
         trace: debug(`trace:${path}`)
     };
 };

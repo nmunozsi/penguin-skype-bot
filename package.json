@@ -19,8 +19,10 @@
     "botbuilder": "^3.4.4",
     "cheerio": "^0.22.0",
     "debug": "^2.6.2",
+    "level": "^1.6.0",
     "lodash": "^4.17.2",
     "moment": "^2.16.0",
+    "pify": "^2.3.0",
     "restify": "^4.3.0"
   },
   "devDependencies": {
