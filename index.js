@@ -16,12 +16,14 @@ bot.dialog('/', (session) => {
     .then((subscriptions) => {
         trace('%O', subscriptions);
 
-        if (find(subscriptions, { channelId: address.channelId })) {
-            log('Channel already subscribed:', address.channelId);
+        if (find(subscriptions, { id: address.id || address.channelId })) {
+            log('Channel already subscribed:', address.id);
             return Promise.resolve(false);
         }
 
-        log('New channel subscribed!', address.channelId);
+        address.id = address.id || address.channelId;
+
+        log('New channel subscribed!', address.id);
         subscriptions.push(address);
         return db.put('subscriptions', subscriptions);
     })

@@ -110,10 +110,7 @@ function addSubscription(subscription) {
     const apiOptions = {
         key: CONFIG.HOLIDAYS_API_KEY,
         country: 'CO',
-        year: now.year(),
-        month: now.month() + 1,
-        day: now.date(),
-        upcoming: true
+        year: now.year()
     };
 
     fetch(`${CONFIG.HOLIDAYS_API_URL}?${qs.stringify(apiOptions)}`)
@@ -125,8 +122,9 @@ function addSubscription(subscription) {
     .then((response) => {
         trace(response);
 
-        let holiday = get(response, 'holidays.[0].date');
-        holiday = holiday && moment(holiday);
+        let holiday = Object.keys(get(response, 'holidays'))
+        .map((h) => moment(h))
+        .filter((h) => h.isSameOrAfter(now, 'month'))[0];
 
         log('Next Colombian Holiday:', holiday.format(CONFIG.DATE_FORMAT));
 
