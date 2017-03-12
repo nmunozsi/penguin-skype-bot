@@ -96,7 +96,7 @@ function addTimer(now, nextDay, holiday, subscription) {
  * @param  {Object} subscription Channel address
  */
 function addSubscription(subscription) {
-    log('Programming next message for: "%s"', subscription.channelId);
+    log('Programming next message for: "%s"', subscription.conversation.id);
 
     const now = moment().tz('US/Central');
     // Get next business day
