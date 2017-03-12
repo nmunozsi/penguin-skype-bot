@@ -21,7 +21,9 @@
     "debug": "^2.6.2",
     "level": "^1.6.0",
     "lodash": "^4.17.2",
-    "moment": "^2.16.0",
+    "moment-business": "^3.0.1",
+    "moment-timezone": "^0.5.11",
+    "node-fetch": "^1.6.3",
     "pify": "^2.3.0",
     "restify": "^4.3.0"
   },

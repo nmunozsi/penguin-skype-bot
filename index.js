@@ -1,39 +1,57 @@
-const builder = require('botbuilder');
-const pify = require('pify');
-const CONFIG = require('./src/config/env');
-const db = require('./src/util/db');
 const { bot } = require('./src/connector');
-const { log, trace, error, debug } = require('./src/config/debug')(__filename);
-// const { storeInDB, createAddressForUser } = require("./src/util/db");
-// const parseMessage = require("./src/util/responses");
+const { find } = require('lodash');
+const { log, trace, error } = require('./src/config/debug')(__filename);
+const builder = require('botbuilder');
+const db = require('./src/util/db');
+const addSubscription = require('./src/subscription');
 
 // BOT DIALOGS
 bot.dialog('/', (session) => {
     log('Message received: "%s"', session.message.text);
-    trace('%j', session.message.address);
+
+    const address = session.message.address;
+    trace('%O', address);
 
     db.get('subscriptions')
-    .then((s) => debug('%j', s));
+    .then((subscriptions) => {
+        trace('%O', subscriptions);
+
+        if (find(subscriptions, { channelId: address.channelId })) {
+            log('Channel already subscribed:', address.channelId);
+            return Promise.resolve(false);
+        }
+
+        log('New channel subscribed!', address.channelId);
+        subscriptions.push(address);
+        return db.put('subscriptions', subscriptions);
+    })
+    .then((subscriptions) => {
+        trace('%O', subscriptions);
+
+        if (!subscriptions) {
+            return;
+        }
+
+        const msg = new builder.Message()
+        .address(address)
+        .text('¡Hola! Estoy suscrito a este canal');
+
+        return bot.send(msg);
+    })
+    .catch((err) => error(err));
 });
 
-
-const botSend = pify(bot.send.bind(bot), { multiArgs: true });
-
+// Sets intervals to send messages in the morning
 db.get('subscriptions')
-.then((s) => debug('%j', s))
-.catch(() => db.put('subscriptions', []));
+.then((subscriptions) => {
+    trace('%O', subscriptions);
 
-setTimeout(() => {
-    const msg = new builder.Message()
-    .address(JSON.parse(CONFIG.TEST_CHANNEL_ADDRESS))
-    .text('Hello');
-
-    trace('%O', msg);
-
-    botSend(msg)
-    .then(() => log('Message sent!'))
-    .catch((err) => error(err));
-}, 2000);
+    subscriptions.forEach(addSubscription);
+})
+.catch((err) => {
+    error(err);
+    if (err.type === 'NotFoundError', db.put('subscriptions', []));
+});
 
 process.on('unhandledRejection', (err) => {
     error(err.message);

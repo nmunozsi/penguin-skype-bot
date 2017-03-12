@@ -2,6 +2,7 @@ const CONFIG = require('./config/env');
 const restify = require('restify');
 const builder = require('botbuilder');
 const assert = require('assert');
+const pify = require('pify');
 
 const { log } = require('./config/debug')(__filename);
 
@@ -38,5 +39,6 @@ if (CONFIG.ENV !== 'local') {
 
 // Bot
 const bot = new builder.UniversalBot(_connector);
+bot.send = pify(bot.send.bind(bot));
 
 module.exports = { bot, server };

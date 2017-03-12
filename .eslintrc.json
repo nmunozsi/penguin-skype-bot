@@ -6,7 +6,7 @@
 
     "rules": {
         "object-curly-spacing": [2, "always"],
-        "max-len": [2, 120],
+        "max-len": [2, 100],
         "comma-dangle": [2, "never"],
         "space-before-function-paren": [2, {
             "anonymous": "always",
