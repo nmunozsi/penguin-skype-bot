@@ -4,7 +4,16 @@
         "ecmaVersion": 6
     },
 
+    "env": {
+        "node": true
+    },
+
+    "globals": {
+        "Promise": true
+    },
+
     "rules": {
+        "no-undef": 2,
         "object-curly-spacing": [2, "always"],
         "max-len": [2, 100],
         "comma-dangle": [2, "never"],
