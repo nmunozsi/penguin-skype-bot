@@ -21,7 +21,7 @@ module.exports = function unsubscribe(bot, address) {
 
         log('Channel unsubscribed "%s"', found.conversation.id);
         msg.text(`He removido la suscripción de este canal.\n\n
-            No recibirás más notificaciones diarias.`);
+No recibirás más notificaciones diarias.`);
 
         pull(subscriptions, found);
         return db.put('subscriptions', subscriptions);
