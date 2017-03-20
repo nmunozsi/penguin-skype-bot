@@ -26,7 +26,7 @@ if (CONFIG.ENV !== 'local') {
     server.post('/api/messages', _connector.listen());
 
     // Init server
-    server.listen(CONFIG.port || CONFIG.PORT, function () {
+    server.listen(CONFIG.SERVER_PORT, function () {
         log('%s listening to %s', server.name, server.url);
     });
 } else {

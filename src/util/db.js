@@ -1,8 +1,9 @@
 const level = require('level');
 const pify = require('pify');
 const { resolve, join } = require('path');
+const { DB_NAME, DB_PATH } = require('./../config/env');
 
-const db = level(resolve(join(process.cwd(), '/database')), {
+const db = level(resolve(join(process.cwd(), DB_PATH, '/' + DB_NAME)), {
     valueEncoding: 'json'
 });
 
