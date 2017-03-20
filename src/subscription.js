@@ -15,6 +15,21 @@ const Task = require('./task');
 const TASKS = [];
 
 /**
+ * Removes a subscription
+ * @method removeSubscription
+ * @param  {Object} subscription Subscription Object
+ */
+function removeSubscription(subscription) {
+    const found = find(TASKS, { id: subscription.conversation.id });
+
+    if (found) {
+        log('Removing programmed message for: "%s"', found.id);
+        clearInterval(found.tick);
+        pull(TASKS, found);
+    }
+}
+
+/**
  * Schedules message
  * @method scheduleMessage
  * @param  {Object} now
@@ -37,12 +52,7 @@ function scheduleMessage(now, nextDay, holiday, subscription) {
         subscription.conversation.id
     );
 
-    const found = find(TASKS, { id: subscription.conversation.id });
-
-    if (found) {
-        clearInterval(found.tick);
-        pull(TASKS, found);
-    }
+    removeSubscription(subscription);
 
     const task = new Task(() => {
         const today = moment().tz('US/Central');
@@ -144,4 +154,4 @@ function addSubscription(subscription) {
     });
 }
 
-module.exports = addSubscription;
+module.exports = { addSubscription, removeSubscription };

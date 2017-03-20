@@ -1,47 +1,27 @@
 const { bot } = require('./src/connector');
-const { find } = require('lodash');
 const { log, trace, error } = require('./src/config/debug')(__filename);
-const builder = require('botbuilder');
 const db = require('./src/util/db');
-const addSubscription = require('./src/subscription');
+const { addSubscription } = require('./src/subscription');
 const CONFIG = require('./src/config/env');
+const RESPONSES = require('./src/responses');
 
 // BOT DIALOGS
 bot.dialog('/', (session) => {
-    log('Message received: "%s"', session.message.text);
-
     const address = session.message.address;
     trace('Address: %O', address);
 
-    db.get('subscriptions')
-    .then((subscriptions) => {
-        trace('Subscriptions: %O', subscriptions);
-
-        if (find(subscriptions, ['conversation.id', address.conversation.id])) {
-            log('Channel already subscribed:', address.conversation.id);
-            return Promise.resolve(true);
+    // Trying to perform action
+    const hasResponse = RESPONSES.some((response) => {
+        if (response.match(session.message.text)) {
+            log('Bot response found for: "%s"', session.message.text);
+            response.action(bot, address);
+            return true;
         }
+    });
 
-        log('New channel subscribed!', address.conversation.id);
-        subscriptions.push(address);
-        return db.put('subscriptions', subscriptions);
-    })
-    .then((subscriptions) => {
-        trace('%O', subscriptions);
-
-        if (subscriptions) {
-            return;
-        }
-
-        const msg = new builder.Message()
-        .address(address)
-        .text('¡Hola! Estoy suscrito a este canal');
-
-        addSubscription(address);
-
-        return bot.send(msg);
-    })
-    .catch((err) => error(err));
+    if (!hasResponse) {
+        log('No response found for "%s"', session.message.text);
+    }
 });
 
 if (CONFIG.WIPE_DB) {
