@@ -45,7 +45,6 @@ function scheduleMessage(now, nextDay, holiday, subscription) {
         return;
     }
 
-    log('Current time: %s', now.format(CONFIG.DATE_FORMAT));
     log('Next message: %s (%d milliseconds). ChannelId: %s',
         nextDay.format(CONFIG.DATE_FORMAT),
         timeToNext,
@@ -72,17 +71,22 @@ function scheduleMessage(now, nextDay, holiday, subscription) {
         .then((data) => {
             trace('%O', data);
 
+            let message;
+
+            if (!data) {
+                message = 'Hubo un error al llamar al API de Penguin Report. 😅';
+            }
+
             const penguined = data.filter((peep) => peep.totalHours < 7)
             .map((peep) => `🐧  <b>${peep['person-name']}</b> (${peep.totalHours} horas)`);
-
-            let message = data.length ?
-            'Todos reportaron horas. ¡Yay! 🙌' :
-            'Hubo un error al llamar al API de Penguin Report. 😅';
 
             if (penguined.length) {
                 message = 'Las siguientes personas aún no han reportado horas:\n\n' +
                 penguined.join('\n\n') +
-                '\n\n---\n\n' + CONFIG.PENGUIN_REPORT_URL;
+                '\n\n---\n\n' + CONFIG.PENGUIN_REPORT_URL +
+                '?date=' + lastBusinessDay.format('YYYY-MM-DD');
+            } else {
+                message = 'Todos reportaron horas. ¡Yay! 🙌';
             }
 
             const msg = new builder.Message()
@@ -115,16 +119,21 @@ function addSubscription(subscription) {
     log('Programming next message for: "%s"', subscription.conversation.id);
 
     const now = moment().tz('US/Central');
-    // Get next business day
-    const nextDay = business.addWeekDays(now.clone(), 1)
-    .hour(8)
-    .minute(30)
-    // const nextDay = now.clone()
-    // .minute(now.minute() + 1)
+    let nextDay = now.clone().hour(8).minute(30);
+
+    log('Current time: %s', now.format(CONFIG.DATE_FORMAT));
+
+    // Get next business day if after 8:30 am
+    if (now.isSameOrAfter(nextDay, 'minute')) {
+        log('After 8:30 am. Adding one day to next day count');
+        nextDay = business.addWeekDays(nextDay, 1);
+    }
+
+    nextDay
     .second(Math.floor(Math.random() * 60))
     .millisecond(0);
 
-    fetch(`${CONFIG.HOLIDAYS_API_URL}/CO/${now.year()}}`)
+    fetch(`${CONFIG.HOLIDAYS_API_URL}/CO/${nextDay.year()}}`)
     .then((res) => res.json())
     .catch((err) => {
         error(err);
