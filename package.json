@@ -13,8 +13,7 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "start": "node .",
-    "package": "zip -r ./penguin-bot_`date +%y.%m.%d`.zip node_modules .env package.json src index.js"
+    "start": "node ."
   },
   "dependencies": {
     "botbuilder": "^3.4.4",
