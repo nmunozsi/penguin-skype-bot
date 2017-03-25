@@ -1,2 +1,2 @@
-Penguin Skype Bot
-=================
+🐧 Penguin Skype Bot
+===================
