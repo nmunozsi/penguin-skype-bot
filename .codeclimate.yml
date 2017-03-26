@@ -1,7 +1,17 @@
 engines:
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
   duplication:
     enabled: true
     config:
       languages:
         javascript:
           mass_threshold: 50
+ratings:
+  paths:
+  - "**.md"
+  - "src/**.js"
