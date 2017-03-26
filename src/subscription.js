@@ -153,7 +153,7 @@ function addSubscription(subscription) {
         if (holidays) {
             holiday = holidays
             .map((h) => moment(h.date))
-            .filter((h) => h.isSameOrAfter(now, 'month'))[0];
+            .filter((h) => h.isSameOrAfter(now, 'day'))[0];
 
             log('Next Colombian Holiday:', holiday.format(CONFIG.DATE_FORMAT));
 
