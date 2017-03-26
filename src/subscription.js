@@ -123,6 +123,11 @@ function addSubscription(subscription) {
 
     log('Current time: %s', now.format(CONFIG.DATE_FORMAT));
 
+    while (business.isWeekendDay(nextDay)) {
+        log('Next day is a weekend day. Adding one day to the count');
+        nextDay = business.addWeekDays(nextDay, 1);
+    }
+
     // Get next business day if after 8:30 am
     if (now.isSameOrAfter(nextDay, 'minute')) {
         log('After 8:30 am. Adding one day to next day count');
