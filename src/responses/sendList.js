@@ -8,7 +8,7 @@ module.exports = function suscribe(bot, address) {
 
     getHoliday(now)
     .then((holiday) => {
-        sendMessage(holiday, address);
+        sendMessage(holiday, address, false);
     })
     .catch((err) => error(err));
 };

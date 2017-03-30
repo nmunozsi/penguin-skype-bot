@@ -10,9 +10,10 @@ const { bot } = require('../connector');
  * Get data from Basecamp and sends the message
  * @param {Boolean} holiday - Whether last day is a holiday
  * @param {Object} subscription - Subscription Object
+ * @param {Boolean} automated - Whether is triggered by someone or is a scheduled called
  * @return {Promise} - Fetch data promise
  */
-function sendMessage(holiday, subscription) {
+function sendMessage(holiday, subscription, automated = true) {
     const today = moment().tz('US/Central');
     const lastBusinessDay = business.subtractWeekDays(today.clone(), 1);
 
@@ -52,7 +53,7 @@ function sendMessage(holiday, subscription) {
 
             const msg = new builder.Message()
             .address(subscription)
-            .text('¡Buenos Días!\n\n' + message );
+            .text(automated ? '¡Buenos Días!\n\n' : '' + message );
 
             trace('%O', msg);
 
