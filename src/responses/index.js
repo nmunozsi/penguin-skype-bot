@@ -13,5 +13,11 @@ module.exports = [
         match(msg) {
             return includes(msg.toLowerCase(), 'suscribe');
         }
+    },
+    {
+        action: require('./sendList'),
+        match(msg) {
+            return includes(msg.toLowerCase(), 'quien falta');
+        }
     }
 ];
