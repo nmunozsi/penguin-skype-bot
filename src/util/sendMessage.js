@@ -53,7 +53,7 @@ function sendMessage(holiday, subscription, automated = true) {
 
             const msg = new builder.Message()
             .address(subscription)
-            .text(automated ? '¡Buenos Días!\n\n' : '' + message );
+            .text((automated ? '¡Buenos Días!\n\n' : '') + message );
 
             trace('%O', msg);
 
