@@ -45,7 +45,7 @@ function sendMessage(holiday, subscription, automated = true) {
                 penguined.join('\n\n') +
                 '\n\n---\n\n' + CONFIG.PENGUIN_REPORT_URL +
                 '?date=' + lastBusinessDay.format('YYYY-MM-DD');
-                message +='https://pbs.twimg.com/media/CSvJt3hXIAA_tNi.jpg:small';
+                message +='\n\nhttps://pbs.twimg.com/media/CSvJt3hXIAA_tNi.jpg:small';
             } else {
                 message = '¡Hemos Cumplido! 🙌 \n\n' +
                 'https://1.bp.blogspot.com/-cQ0b6am0ckc/WIEbGsVjH2I/AAAAAAAAAMI/' +
