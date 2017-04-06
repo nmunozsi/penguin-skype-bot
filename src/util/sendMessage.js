@@ -48,8 +48,7 @@ function sendMessage(holiday, subscription, automated = true) {
                 message +='\n\nhttps://pbs.twimg.com/media/CSvJt3hXIAA_tNi.jpg:small';
             } else {
                 message = '¡Hemos Cumplido! 🙌 \n\n' +
-                'https://1.bp.blogspot.com/-cQ0b6am0ckc/WIEbGsVjH2I/AAAAAAAAAMI/' +
-                '8W0wdpRdGNYCOfU2I1TD3NK2mIbqiI3QACLcB/s320/hemoscumplido.jpg';
+                'http://media0.giphy.com/media/l4q8c8dxU5OalAkA8/giphy.gif';
             }
 
             const msg = new builder.Message()
