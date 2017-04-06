@@ -47,8 +47,7 @@ function sendMessage(holiday, subscription, automated = true) {
                 '?date=' + lastBusinessDay.format('YYYY-MM-DD');
                 message +='\n\nhttps://pbs.twimg.com/media/CSvJt3hXIAA_tNi.jpg:small';
             } else {
-                message = '¡Hemos Cumplido! 🙌 \n\n' +
-                '/giphy done';
+                message = '/giphy done';
             }
 
             const msg = new builder.Message()
