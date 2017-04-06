@@ -76,7 +76,7 @@ function addSubscription(subscription) {
     log('Programming next message for: "%s"', subscription.conversation.id);
 
     const now = moment().tz('US/Central');
-    let nextDay = now.clone().hour(18).minute(17);
+    let nextDay = now.clone().hour(8).minute(30);
 
     log('Current time: %s', now.format(CONFIG.DATE_FORMAT));
 
