@@ -20,7 +20,7 @@ bot.dialog('/', (session) => {
     });
 
     if (!hasResponse) {
-        log('No response found for "%s"', session.message.text);
+        //log('No response found for "%s"', session.message.text);
     }
 });
 
