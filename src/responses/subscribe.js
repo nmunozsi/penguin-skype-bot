@@ -18,7 +18,7 @@ module.exports = function suscribe(bot, address) {
         }
 
         log('New channel subscribed!', address.conversation.id);
-        msg.text(`*bold*¡Hola!*bold* Me he suscrito a este canal.\n\n
+        msg.text(`*¡Hola!* Me he suscrito a este canal.\n\n
 A partir de ahora, recibirás notificaciones diarias sobre quién no ha reportado.`);
 
         subscriptions.push(address);

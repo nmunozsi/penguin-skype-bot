@@ -38,7 +38,7 @@ function sendMessage(holiday, subscription, automated = true) {
             }
 
             const penguined = data.filter((peep) => peep.totalHours < 7)
-            .map((peep) => `🐧  *bold*${peep['person-name']}*bold* (${peep.totalHours} horas)`);
+            .map((peep) => `🐧  *${peep['person-name']}* (${peep.totalHours} horas)`);
 
             if (penguined.length) {
                 message = 'Las siguientes personas aún no han reportado horas:\n\n' +
