@@ -26,7 +26,7 @@ function sendMessage(holiday, subscription, automated = true) {
 
     log('Last business day:', lastBusinessDay.format(CONFIG.DATE_FORMAT));
 
-    return fetch(`${CONFIG.PENGUIN_REPORT_API}?date=${lastBusinessDay.format('YYYY-MM-DD')}`)
+    return fetch(`${CONFIG.PENGUIN_REPORT_API}&date=${lastBusinessDay.format('YYYY-MM-DD')}`)
         .then((res) => res.json())
         .then((data) => {
             trace('%O', data);
